@@ -24,8 +24,6 @@ main(void) {
         io_serv, boost::asio::ip::tcp::endpoint{
                      boost::asio::ip::address::from_string("127.0.0.1"), 7777}};
 
-    std::string msg{};
-
     while (true) {
         boost::asio::ip::tcp::socket sock{io_serv};
         accr.accept(sock);
