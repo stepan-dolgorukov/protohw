@@ -1,19 +1,43 @@
 #include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <boost/thread.hpp>
 #include <iostream>
 #include <string>
 
-std::string
-read(boost::asio::ip::tcp::socket& sock) {
-    boost::asio::streambuf sbuf{};
-    boost::asio::read_until(sock, sbuf, '\n');
+class session {
+   private:
+    boost::asio::ip::tcp::socket sock;
+    std::string to_send;
 
-    return boost::asio::buffer_cast<const char*>(sbuf.data());
-}
+   public:
+    static std::shared_ptr<session>
+    init(boost::asio::io_service& ioserv) {
+        return std::shared_ptr<session>(new session(ioserv));
+    }
 
-void
-send(boost::asio::ip::tcp::socket& socket, const std::string& msg) {
-    boost::asio::write(socket, boost::asio::buffer(msg));
-}
+    boost::asio::ip::tcp::socket&
+    socket(void) {
+        return sock;
+    }
+
+    void
+    read(void) {
+        boost::asio::streambuf sbuf{};
+        boost::asio::read_until(sock, sbuf, '\n');
+
+        to_send = boost::asio::buffer_cast<const char*>(sbuf.data());
+    }
+
+    void
+    send(void) {
+        std::cout << to_send << std::endl;
+        boost::asio::write(sock, boost::asio::buffer(to_send));
+    }
+
+   protected:
+    session(boost::asio::io_service& ioserv) : sock{ioserv} {
+    }
+};
 
 int
 main(void) {
@@ -24,13 +48,10 @@ main(void) {
                      boost::asio::ip::address::from_string("127.0.0.1"), 7777}};
 
     while (true) {
-        boost::asio::ip::tcp::socket sock{io_serv};
-        accr.accept(sock);
+        auto sess = session::init(io_serv);
+        accr.accept(sess->socket());
 
-        std::string msg{read(sock)};
-        std::cout << msg << std::endl;
-
-        send(sock, msg);
-        sock.close();
+        sess->read();
+        boost::thread(boost::bind(&session::send, sess)).detach();
     }
 }
