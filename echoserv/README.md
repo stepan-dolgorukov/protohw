@@ -4,3 +4,6 @@
 ответы, не дожидаясь отправки предыдущих ответов.
 
 ```clang++ serv.cxx -o serv -lboost_thread -lboost_system```
+
+Компиляция клиентской программы:\
+```clang++ client.cxx -o client -lboost_system```
