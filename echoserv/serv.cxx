@@ -18,7 +18,6 @@ send(boost::asio::ip::tcp::socket& socket, const std::string& msg) {
 int
 main(void) {
     boost::asio::io_service io_serv{};
-    boost::asio::ip::tcp::socket socket(io_serv);
 
     boost::asio::ip::tcp::acceptor accr{
         io_serv, boost::asio::ip::tcp::endpoint{
