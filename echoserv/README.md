@@ -3,7 +3,7 @@
 потоке. Это позволяет нам продолжить принимать новые запросы и отправлять новые 
 ответы, не дожидаясь отправки предыдущих ответов.
 
-```clang++ serv.cxx -o serv -lboost_thread -lboost_system```
+```clang++ server.cxx -o server -lboost_thread -lboost_system```
 
 Компиляция клиентской программы:\
 ```clang++ client.cxx -o client -lboost_system```
