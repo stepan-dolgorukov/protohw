@@ -1,0 +1,15 @@
+$ORIGIN svet.org.
+$TTL    1h;
+
+@       SOA ns1 hostmaster (
+            2023032301; serial
+            3600; refresh
+            900; retry
+            1296000; expire
+            21600; minimum
+        )
+
+        NS  ns1
+
+@       A 127.0.0.1
+ns1     A 127.0.0.1
