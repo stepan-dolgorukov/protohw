@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 
-SMTP_SERVER='smtp.gmail.com'
-PORT=465
-
+export SMTP_SERVER
+export SMTP_SERVER_PORT
 export SENDER
 export PASSWORD
 export RECIPIENT
 export MESSAGE_FILE
 
 echo "Server: $SMTP_SERVER"
-echo "Port: $PORT"
+echo "Port: $SMTP_SERVER_PORT"
 echo "From: $SENDER"
 echo "To: $RECIPIENT"
 echo "Message File: $MESSAGE_FILE"
@@ -36,4 +35,4 @@ sleep 1s
 cat $MESSAGE_FILE
 sleep 1s
 echo "."
-) | openssl s_client -connect "$SMTP_SERVER:$PORT" -crlf
+) | openssl s_client -connect "$SMTP_SERVER:$SMTP_SERVER_PORT" -crlf
