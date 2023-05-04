@@ -13,6 +13,8 @@ echo "From: $SENDER"
 echo "To: $RECIPIENT"
 echo "Message File: $MESSAGE_FILE"
 
+sleep 5.0s
+
 B64_SENDER=`base64 <<< $SENDER`
 B64_PASSWORD=`base64 <<< $PASSWORD`
 
