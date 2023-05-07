@@ -1,6 +1,7 @@
 #include <boost/asio.hpp>
 #include <boost/program_options.hpp>
 #include <iostream>
+#include <limits>
 
 int
 main(int nargs, char* args[]) {
@@ -10,7 +11,9 @@ main(int nargs, char* args[]) {
   desc.add_options()("tcp,t", "Сканирование TCP")("udp,u", "Сканирование UDP")(
       "begin,b", prop::value<std::uint16_t>()->default_value(1u),
       "Порт, с которого начать сканирование")(
-      "end,e", prop::value<std::uint16_t>()->default_value(65535u),
+      "end,e",
+      prop::value<std::uint16_t>()->default_value(
+          std::numeric_limits<std::uint16_t>::max()),
       "Порт, которым завершить сканирование");
 
   prop::variables_map argmap{};
