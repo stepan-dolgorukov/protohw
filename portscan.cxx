@@ -35,6 +35,14 @@ main(int nargs, char* args[]) {
     return 1;
   }
 
-  std::cout << argmap["begin"].as<std::uint16_t>() << ' '
-            << argmap["end"].as<std::uint16_t>() << '\n';
+  std::uint16_t range_begin_port{argmap["begin"].as<std::uint16_t>()};
+  std::uint16_t range_end_port{argmap["end"].as<std::uint16_t>()};
+
+  if (range_begin_port > range_end_port) {
+    std::cout << "Порт начала не должен превосходить порт конца" << '\n';
+    return 1;
+  }
+
+  std::cout << range_begin_port << ' '
+            << range_end_port << '\n';
 }
