@@ -19,7 +19,11 @@ main(int nargs, char* args[]) {
       ("end,e",
       prop::value<std::uint16_t>()->default_value(
         std::numeric_limits<std::uint16_t>::max()),
-      "Порт, которым завершить сканирование");
+      "Порт, которым завершить сканирование")
+      
+      ("address,a",
+      prop::value<std::string>()->default_value("127.0.0.1"),
+      "Адрес хоста");
 
   prop::variables_map argmap{};
 
@@ -40,8 +44,14 @@ main(int nargs, char* args[]) {
     return 1;
   }
 
+  if (!argmap.count("address")) {
+    std::cout << desc << '\n';
+    return 1;
+  }
+
   std::uint16_t range_begin_port{argmap["begin"].as<std::uint16_t>()};
   std::uint16_t range_end_port{argmap["end"].as<std::uint16_t>()};
+  std::string address{argmap["address"].as<std::string>()};
 
   if (range_begin_port > range_end_port) {
     std::cout << "Порт начала не должен превосходить порт конца" << '\n';
@@ -50,4 +60,6 @@ main(int nargs, char* args[]) {
 
   std::cout << range_begin_port << ' '
             << range_end_port << '\n';
+
+  std::cout << address << '\n';
 }
