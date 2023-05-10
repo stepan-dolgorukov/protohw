@@ -8,12 +8,17 @@ main(int nargs, char* args[]) {
   using namespace boost;
   namespace prop = program_options;
   prop::options_description desc{};
-  desc.add_options()("tcp,t", "Сканирование TCP")("udp,u", "Сканирование UDP")(
-      "begin,b", prop::value<std::uint16_t>()->default_value(1u),
-      "Порт, с которого начать сканирование")(
-      "end,e",
+  desc.add_options()
+      ("tcp,t", "Сканирование TCP")
+      ("udp,u", "Сканирование UDP")(
+
+      "begin,b",
+      prop::value<std::uint16_t>()->default_value(1u),
+      "Порт, с которого начать сканирование")
+
+      ("end,e",
       prop::value<std::uint16_t>()->default_value(
-          std::numeric_limits<std::uint16_t>::max()),
+        std::numeric_limits<std::uint16_t>::max()),
       "Порт, которым завершить сканирование");
 
   prop::variables_map argmap{};
