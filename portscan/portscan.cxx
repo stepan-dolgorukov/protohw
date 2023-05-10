@@ -39,11 +39,6 @@ main(int nargs, char* args[]) {
     return 1;
   }
 
-  if (!argmap.count("begin") || !argmap.count("end")) {
-    std::cout << desc << '\n';
-    return 1;
-  }
-
   if (!argmap.count("address")) {
     std::cout << desc << '\n';
     return 1;
