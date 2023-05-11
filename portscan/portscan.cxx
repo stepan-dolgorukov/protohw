@@ -3,6 +3,9 @@
 #include <iostream>
 #include <limits>
 
+#include "scan.hxx"
+#include "scanner.hxx"
+
 int
 main(int nargs, char* args[]) {
   using namespace boost;
@@ -53,8 +56,31 @@ main(int nargs, char* args[]) {
     return 1;
   }
 
-  std::cout << range_begin_port << ' '
-            << range_end_port << '\n';
+  bool tcp{1u <= argmap.count("tcp")};
+  bool udp{1u <= argmap.count("udp")};
 
-  std::cout << address << '\n';
+  portscan::scan scan{
+    .udp = udp,
+    .tcp = tcp,
+    .port_range{range_begin_port, range_end_port},
+    .address{address}
+  };
+
+  std::cout << scan << '\n';
+
+  portscan::scanner scanner{scan};
+  auto scan_result{scanner()};
+
+  if (udp) {
+    for (std::uint16_t port : scan_result.first) {
+      std::cout << "UDP " << port << '\n';
+    }
+  }
+
+  if (tcp) {
+    for (std::uint16_t port : scan_result.second) {
+      std::cout << "TCP " << port << '\n';
+    }
+  }
+
 }
