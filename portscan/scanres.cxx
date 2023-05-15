@@ -22,7 +22,7 @@ std::ostream& portscan::operator<<(std::ostream& os, const portscan::scanres& sc
   }
 
   for (auto port : scr.tcp()) {
-    os << "UDP " << port << '\n';
+    os << "TCP " << port << '\n';
   }
 
   return os;
