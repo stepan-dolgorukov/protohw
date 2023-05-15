@@ -1,5 +1,4 @@
 #include "scanner.hxx"
-#include <asm-generic/socket.h>
 #include <forward_list>
 #include <iostream>
 
@@ -7,6 +6,8 @@
 #include <netinet/tcp.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+
+#include <boost/asio.hpp>
 
 portscan::scanres portscan::scanner::operator()() {
 
@@ -106,27 +107,38 @@ bool portscan::scanner::tcp_port_opened(
   const std::string& address,
   std::uint16_t port) {
 
-  sockaddr_in addr{
-    .sin_family = AF_INET,
-  };
+  using namespace boost;
 
-  if (0 >= inet_pton(AF_INET, address.c_str(), &addr.sin_addr)) {
+  asio::io_context iocxt{};
+
+  asio::ip::tcp::endpoint endpoint{
+    asio::ip::make_address_v4(address),
+    port};
+
+  asio::ip::tcp::socket sock{iocxt};
+  system::error_code ec{};
+
+  sock.open(endpoint.protocol(), ec);
+
+  if (ec) {
     return false;
   }
 
-  int sock{socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)};
+  {
+    int timeout{2000};
+    auto native_sock{sock.native_handle()};
 
-  if (-1 == sock) {
-    return false;
+    setsockopt(
+      native_sock,
+      SOL_TCP,
+      TCP_USER_TIMEOUT,
+      &timeout,
+      sizeof timeout);
   }
 
-  addr.sin_port = htons(port);
+  sock.connect(endpoint, ec);
 
-  int timeout{2000};
-  setsockopt(sock, SOL_TCP, TCP_USER_TIMEOUT, (char*) &timeout, sizeof (timeout));
-
-  if (0 != connect(sock, (struct sockaddr*)&addr, sizeof(addr))) {
-    close(sock);
+  if (ec) {
     return false;
   }
 
