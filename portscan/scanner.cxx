@@ -27,16 +27,16 @@ std::forward_list<std::uint16_t> portscan::scanner::udp_scan(
   const std::string& address,
   std::pair<std::uint16_t, std::uint16_t> port_range) {
 
-    std::forward_list<std::uint16_t> opened_ports{};
+  std::forward_list<std::uint16_t> opened_ports{};
 
-    for (std::uint16_t port{port_range.first}; 0u != port && port <= port_range.second; ++port) {
-      if (udp_port_opened(address, port)) {
-        opened_ports.push_front(port);
-      }
+  for (std::uint16_t port{port_range.first}; 0u != port && port <= port_range.second; ++port) {
+    if (udp_port_opened(address, port)) {
+      opened_ports.push_front(port);
     }
-
-    return opened_ports;
   }
+
+  return opened_ports;
+}
 
 bool portscan::scanner::udp_port_opened(
   const std::string& address,
