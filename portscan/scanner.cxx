@@ -8,20 +8,19 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-std::pair<std::forward_list<std::uint16_t>, std::forward_list<std::uint16_t>>
-portscan::scanner::operator()() {
+portscan::scanres portscan::scanner::operator()() {
 
-  std::pair<std::forward_list<std::uint16_t>, std::forward_list<std::uint16_t>> result{};
+  std::forward_list<std::uint16_t> udp{}, tcp{};
 
   if (scan_.udp) {
-    result.first = udp_scan(scan_.address, scan_.port_range);
+    udp = udp_scan(scan_.address, scan_.port_range);
   }
 
   if (scan_.tcp) {
-    result.second = tcp_scan(scan_.address, scan_.port_range);
+    tcp = tcp_scan(scan_.address, scan_.port_range);
   }
 
-  return result;
+  return {udp, tcp};
 }
 
 std::forward_list<std::uint16_t> portscan::scanner::udp_scan(

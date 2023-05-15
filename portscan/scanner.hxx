@@ -3,6 +3,7 @@
 #include <boost/system/detail/error_category.hpp>
 #include <boost/system/detail/error_code.hpp>
 #include <forward_list>
+#include "scanres.hxx"
 
 namespace portscan {
   class scanner;
@@ -16,8 +17,7 @@ class portscan::scanner {
   scanner(const portscan::scan& scan) : scan_{scan} {
   };
 
-  std::pair<std::forward_list<std::uint16_t>, std::forward_list<std::uint16_t>>
-  operator()();
+  portscan::scanres operator()();
 
   private:
   std::forward_list<std::uint16_t> udp_scan(

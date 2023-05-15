@@ -69,18 +69,5 @@ main(int nargs, char* args[]) {
   std::cout << scan << '\n';
 
   portscan::scanner scanner{scan};
-  auto scan_result{scanner()};
-
-  if (udp) {
-    for (std::uint16_t port : scan_result.first) {
-      std::cout << "UDP " << port << '\n';
-    }
-  }
-
-  if (tcp) {
-    for (std::uint16_t port : scan_result.second) {
-      std::cout << "TCP " << port << '\n';
-    }
-  }
-
+  std::cout << scanner();
 }
