@@ -29,88 +29,107 @@ std::forward_list<std::uint16_t> portscan::scanner::udp_scan(
   std::pair<std::uint16_t, std::uint16_t> port_range) {
 
     std::forward_list<std::uint16_t> opened_ports{};
-    int sock{-1};
-
-    sockaddr_in addr{
-      .sin_family = AF_INET,
-    };
-
-    if (0 >= inet_pton(AF_INET, address.c_str(), &addr.sin_addr)) {
-      return {};
-    }
-
-    char s[128u]{};
 
     for (std::uint16_t port{port_range.first}; 0u != port && port <= port_range.second; ++port) {
-      sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-
-      if (sock == -1) {
-        continue;
-      }
-
-      addr.sin_port = htons(port);
-
-      ssize_t nbytes{sendto(
-        sock,
-        "portscan",
-        9u,
-        0,
-        (sockaddr*)&addr,
-        sizeof addr
-      )};
-
-      if(0 > nbytes){
-        close(sock);
-        continue;
-      }
-
-      struct timeval tv{.tv_sec = 1, .tv_usec = 500};
-      setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
-
-      socklen_t socklen{sizeof addr};
-      if (0 <= recvfrom(sock, (void*)s, 128u, 0, (sockaddr*)&addr, &socklen)) {
+      if (udp_port_opened(address, port)) {
         opened_ports.push_front(port);
       }
-
-      close(sock);
     }
 
     return opened_ports;
   }
+
+bool portscan::scanner::udp_port_opened(
+  const std::string& address,
+  std::uint16_t port) {
+
+  sockaddr_in addr{
+    .sin_family = AF_INET,
+  };
+
+  if (0 >= inet_pton(AF_INET, address.c_str(), &addr.sin_addr)) {
+    return false;
+  }
+
+  char received[128u]{};
+  char msg[]{"portscan"};
+
+  int sock{socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)};
+
+  if (-1 == sock) {
+    return false;
+  }
+
+  addr.sin_port = htons(port);
+
+  ssize_t nbytes{sendto(
+    sock,
+    msg,
+    sizeof msg,
+    0,
+    (sockaddr*)&addr,
+    sizeof addr
+  )};
+
+  if(0 > nbytes){
+    close(sock);
+    return false;
+  }
+
+  struct timeval tv{.tv_sec = 1, .tv_usec = 500};
+  setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv);
+
+  socklen_t socklen{sizeof addr};
+  if (0 > recvfrom(sock, (void*)received, sizeof received, 0, (sockaddr*)&addr, &socklen)) {
+    close(sock);
+    return false;
+  }
+
+  return true;
+} 
 
 std::forward_list<std::uint16_t> portscan::scanner::tcp_scan(
   const std::string& address,
   std::pair<std::uint16_t, std::uint16_t> port_range) {
 
-    std::forward_list<std::uint16_t> opened_ports{};
-    int sock{-1};
+  std::forward_list<std::uint16_t> opened_ports{};
 
-    sockaddr_in addr{
-      .sin_family = AF_INET,
-    };
-
-    if (0 >= inet_pton(AF_INET, address.c_str(), &addr.sin_addr)) {
-      return {};
+  for (std::uint16_t port{port_range.first}; 0u != port && port <= port_range.second; ++port) {
+    if (tcp_port_opened(address, port)) {
+      opened_ports.push_front(port);
     }
-
-    for (std::uint16_t port{port_range.first}; 0u != port && port <= port_range.second; ++port) {
-      sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-
-      if (-1 == sock) {
-        continue;
-      }
-
-      addr.sin_port = htons(port);
-
-      int timeout{2000};
-      setsockopt(sock, SOL_TCP, TCP_USER_TIMEOUT, (char*) &timeout, sizeof (timeout));
-
-      if (0 == connect(sock, (struct sockaddr*)&addr, sizeof(addr))) {
-        opened_ports.push_front(port);
-      }
-
-      close(sock);
-    }
-
-    return opened_ports;
   }
+
+  return opened_ports;
+}
+
+bool portscan::scanner::tcp_port_opened(
+  const std::string& address,
+  std::uint16_t port) {
+
+  sockaddr_in addr{
+    .sin_family = AF_INET,
+  };
+
+  if (0 >= inet_pton(AF_INET, address.c_str(), &addr.sin_addr)) {
+    return false;
+  }
+
+  int sock{socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)};
+
+  if (-1 == sock) {
+    return false;
+  }
+
+  addr.sin_port = htons(port);
+
+  int timeout{2000};
+  setsockopt(sock, SOL_TCP, TCP_USER_TIMEOUT, (char*) &timeout, sizeof (timeout));
+
+  if (0 != connect(sock, (struct sockaddr*)&addr, sizeof(addr))) {
+    close(sock);
+    return false;
+  }
+
+  return true;
+}

@@ -27,4 +27,12 @@ class portscan::scanner {
   std::forward_list<std::uint16_t> tcp_scan(
     const std::string& addr,
     std::pair<std::uint16_t, std::uint16_t> port_range);
+
+  bool udp_port_opened(
+    const std::string& addr,
+    std::uint16_t port);
+
+  bool tcp_port_opened(
+    const std::string& addr,
+    std::uint16_t port);
 };
