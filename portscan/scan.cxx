@@ -5,5 +5,5 @@ std::ostream& portscan::operator<<(std::ostream& os, const portscan::scan& sc) {
     << "UDP: " << std::boolalpha << sc.udp << '\n'
     << "TCP: " << std::boolalpha << sc.tcp << '\n'
     << "Port Range: [" << sc.port_range.first << ':'
-    << sc.port_range.second << "]";
+    << sc.port_range.second << ']';
 }
