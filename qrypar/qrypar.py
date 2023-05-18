@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+print("content-type: html/text\n\n")
+
 import os
 import re
 
