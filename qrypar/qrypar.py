@@ -4,9 +4,7 @@ import os
 import re
 
 def query_string() -> str:
-    varname: str = "QUERY_STRING"
-
-    if (qs := os.getenv(varname)) is None:
+    if (qs := os.getenv(varname := "QUERY_STRING")) is None:
         raise ValueError(f"Переменная среды «{varname}» не задана")
 
     return qs
