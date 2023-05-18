@@ -10,7 +10,7 @@ def query_string() -> str:
     return qs
 
 def parse(qs: str) -> dict[str, str]:
-    kv_storage = dict()
+    kv_storage = {}
 
     if not qs:
         return kv_storage
