@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+
+print("content-type: html/text\n\n")
+
+import os
+import re
+
+def query_string() -> str:
+    if (qs := os.getenv(varname := "QUERY_STRING")) is None:
+        raise ValueError(f"Переменная среды «{varname}» не задана")
+
+    return qs
+
+def parse(qs: str) -> dict[str, str]:
+    kv_storage = {}
+
+    if not qs:
+        return kv_storage
+
+    for pair in (kv_pairs := qs.split('&')):
+        if not (re.fullmatch(".+=.+", pair)):
+            continue
+
+        key, value = pair.split('=')
+        kv_storage[key] = value
+
+    return kv_storage
+
+if __name__ == '__main__':
+    qs = query_string()
+    kvs = parse(qs)
+
+    print(kvs)
