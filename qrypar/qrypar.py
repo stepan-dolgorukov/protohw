@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-print("content-type: html/text\n\n")
+print("content-type: text/html\n\n")
 
 import os
 import re
