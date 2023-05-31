@@ -39,8 +39,3 @@ def make_request_packet():
         transmit_timestamp
 
     return packet
-
-
-if __name__ == '__main__':
-    packet = make_request_packet()
-    print(packet)
