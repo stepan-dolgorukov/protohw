@@ -32,7 +32,7 @@ def make_reply_packet(request_packet: bytes, offset: int):
     reference_id = pack("!I", 0x0)
 
     request_timestamp = timestamp_from_request(request_packet)
-    modified_timestamp = timestamp_with_offset(request_timestamp, 10)
+    modified_timestamp = timestamp_with_offset(request_timestamp, offset)
 
     reference_timestamp = pack("!Q", modified_timestamp)
     origin_timestamp = timestamp_from_request(request_packet)
