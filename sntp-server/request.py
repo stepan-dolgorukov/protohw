@@ -20,12 +20,11 @@ def make_request_packet():
     root_dispersion = pack("!I", 0x01_00_00)
 
     reference_id = pack("!I", 0)
+
     reference_timestamp = pack("!Q", 0)
-
-    origin_timestamp = pack("!I", 0)
+    origin_timestamp = pack("!Q", 0)
     receive_timestamp = pack("!Q", 0)
-
-    transmit_timestamp = pack("!Qxxxx", current_timestamp())
+    transmit_timestamp = pack("!Ixxxx", current_timestamp())
 
     packet = flags + \
         peer_clock_stratum + \
