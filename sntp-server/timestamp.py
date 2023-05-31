@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 def timestamp(date):
     since = date - datetime(1900, 1, 1, 0, 0, 0)
@@ -8,6 +8,15 @@ def timestamp(date):
 
 def current_timestamp():
     return timestamp(datetime.utcnow())
+
+def datetime_by_timestamp(timestamp: int):
+    dt = datetime(1900, 1, 1, 0, 0, 0)
+
+    timestamp_delta = timedelta(minutes=timestamp//60, seconds=timestamp % 60)
+    dt += timestamp_delta
+
+    return dt
+
 
 if __name__ == '__main__':
     print(hex(current_timestamp()))
