@@ -22,8 +22,8 @@ def run_server(port, delay):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--port", "-p", type=int, help="Порт, который будет слушать сервер")
-    parser.add_argument("--delay", "-d", type=int, help="Смещение-обманка")
+    parser.add_argument("--port", "-p", type=int, default=123, help="Порт, который будет слушать сервер")
+    parser.add_argument("--delay", "-d", type=int, default=5, help="Смещение-обманка")
 
     args = parser.parse_args()
 
