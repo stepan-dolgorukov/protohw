@@ -3,10 +3,12 @@
 from struct import pack, unpack
 from timestamp import current_timestamp
 
+
 def timestamp_from_request(packet: bytes):
     # Последние 8 байтов пакета
-    transmit_timestamp = packet[len(packet)-8:]
+    transmit_timestamp = packet[len(packet) - 8:]
     return transmit_timestamp
+
 
 def timestamp_with_offset(timestamp: bytes, offset: int):
     timestamp = int.from_bytes(timestamp, byteorder="big")

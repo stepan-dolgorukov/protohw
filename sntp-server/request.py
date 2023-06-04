@@ -3,6 +3,7 @@
 from timestamp import current_timestamp
 from struct import pack
 
+
 def make_request_packet():
     # 11.. .... Leap Indicator, значение: 3
     # ..10 0... Version Number, значение: 4

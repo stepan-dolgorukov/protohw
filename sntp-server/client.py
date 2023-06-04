@@ -4,6 +4,7 @@ from request import make_request_packet
 from timestamp import datetime_by_timestamp, current_timestamp
 import socket
 
+
 def time_from_reply(reply: bytes):
     transmit_timestamp = reply[len(reply) - 8:-4]
     timestamp = int.from_bytes(transmit_timestamp, "big")
