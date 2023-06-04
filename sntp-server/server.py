@@ -4,6 +4,11 @@ import socket
 import argparse
 import sys
 from reply import timestamp_from_request, make_reply_packet
+from multiprocessing.pool import ThreadPool
+
+def serve(sock, data, sender, delay):
+    responce = make_reply_packet(data, delay)
+    sock.sendto(responce, sender)
 
 
 def run_server(port, delay):
@@ -17,10 +22,10 @@ def run_server(port, delay):
     print(
         f"Сервер успешно запущен. Порт: {args.port}, смещение-обманка: {args.delay} сек.")
 
-    while True:
-        data, sender = sock.recvfrom(128)
-        responce = make_reply_packet(data, delay)
-        sock.sendto(responce, sender)
+    with ThreadPool() as pool:
+        while True:
+            data, sender = sock.recvfrom(128)
+            pool.apply(serve, args=(sock, data, sender, delay))
 
 
 if __name__ == '__main__':
@@ -30,7 +35,7 @@ if __name__ == '__main__':
         "--port",
         "-p",
         type=int,
-        default=123,
+        default=55123,
         help="Порт, который будет слушать сервер")
 
     parser.add_argument(
