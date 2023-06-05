@@ -6,11 +6,12 @@ from argparse import ArgumentParser
 
 from directory_regular_files import directory_regular_files
 from access_token import access_token
+from pathlib import Path
 
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('-a', '--aid', help='Идентификатор альбома')
-    parser.add_argument('-d', '--dir', help='Каталог с файлами на загрузку')
+    parser.add_argument('-d', '--dir', type=Path, help='Каталог с файлами на загрузку')
 
     args = parser.parse_args()
 
@@ -53,7 +54,7 @@ if __name__ == '__main__':
 
     for file in directory_regular_files(args.dir):
         print(f"Загружается {file}")
-        path_file = args.dir + '/' + file
+        path_file = Path(args.dir) / file
 
         try:
             responce = requests.post(server_url, files={"file1": open(path_file, "rb")})
