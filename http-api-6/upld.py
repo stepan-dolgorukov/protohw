@@ -13,6 +13,15 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--dir', help='Каталог с файлами на загрузку')
 
     args = parser.parse_args()
+
+    if args.aid is None:
+        print("Не задан идентификатор альбома.")
+        exit(1)
+
+    if args.dir is None:
+        print("Не задан каталог с файлами на загрузку.")
+        exit(1)
+
     token = None
 
     try:
