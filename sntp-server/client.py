@@ -23,4 +23,4 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
 
 reply = sock.recv(128)
-print(f"Время на сервере: {time_from_reply(reply)}")
+print(f"Время от сервера: {time_from_reply(reply)}")
