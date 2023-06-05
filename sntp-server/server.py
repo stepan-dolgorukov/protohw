@@ -6,6 +6,7 @@ import sys
 from reply import timestamp_from_request, make_reply_packet
 from multiprocessing.pool import ThreadPool
 
+
 def serve(sock, data, sender, delay):
     responce = make_reply_packet(data, delay)
     sock.sendto(responce, sender)
