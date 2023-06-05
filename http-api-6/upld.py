@@ -4,7 +4,7 @@ import vk
 import requests
 from argparse import ArgumentParser
 
-from directory_regular_files import directory_regular_files
+from directory_image_files import directory_image_files
 from access_token import access_token
 from pathlib import Path
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
         print(err)
         exit(1)
 
-    for file in directory_regular_files(args.dir):
+    for file in directory_image_files(args.dir):
         print(f"Загружается {file}")
         path_file = Path(args.dir) / file
 
