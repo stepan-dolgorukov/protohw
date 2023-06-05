@@ -11,7 +11,11 @@ from pathlib import Path
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('-a', '--aid', help='Идентификатор альбома')
-    parser.add_argument('-d', '--dir', type=Path, help='Каталог с файлами на загрузку')
+    parser.add_argument(
+        '-d',
+        '--dir',
+        type=Path,
+        help='Каталог с файлами на загрузку')
 
     args = parser.parse_args()
 
@@ -52,12 +56,16 @@ if __name__ == '__main__':
         print(err)
         exit(1)
 
-    for number_file, file in enumerate(files := directory_image_files(args.dir)):
+    for number_file, file in enumerate(
+            files := directory_image_files(args.dir)):
         print(f"Загружается {file}, {1 + number_file}/{len(files)}")
         path_file = Path(args.dir) / file
 
         try:
-            responce = requests.post(server_url, files={"file1": open(path_file, "rb")})
+            responce = requests.post(
+                server_url, files={
+                    "file1": open(
+                        path_file, "rb")})
             json_responce = responce.json()
 
             api.photos.save(

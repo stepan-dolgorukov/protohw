@@ -2,6 +2,7 @@ from os import listdir
 from pathlib import Path
 import magic
 
+
 def directory_image_files(directory: Path):
     regular_files = set()
     types_images = {"png", "jpeg"}
