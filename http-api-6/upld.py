@@ -23,6 +23,9 @@ if __name__ == '__main__':
         exit(1)
 
     token = None
+    api = None
+    server = None
+    server_url = None
 
     try:
         token = access_token()
@@ -30,19 +33,38 @@ if __name__ == '__main__':
         print(env_err)
         exit(1)
 
-    api = vk.API(access_token=token, v="5.131")
-    server = api.photos.getUploadServer(album_id=args.aid)
-    server_url = server["upload_url"]
+    try:
+        api = vk.API(access_token=token, v="5.131")
+    except Exception as err:
+        print(err)
+        exit(1)
+
+    try:
+        server = api.photos.getUploadServer(album_id=args.aid)
+    except Exception as err:
+        print(err)
+        exit(1)
+
+    try:
+        server_url = server["upload_url"]
+    except Exception as err:
+        print(err)
+        exit(1)
 
     for file in directory_regular_files(args.dir):
         print(f"Загружается {file}")
         path_file = args.dir + '/' + file
 
-        responce = requests.post(server_url, files={"file1": open(path_file, "rb")})
-        json_responce = responce.json()
+        try:
+            responce = requests.post(server_url, files={"file1": open(path_file, "rb")})
+            json_responce = responce.json()
 
-        api.photos.save(
-            album_id=json_responce["aid"],
-            server=json_responce["server"],
-            photos_list=json_responce["photos_list"],
-            hash=json_responce["hash"])
+            api.photos.save(
+                album_id=json_responce["aid"],
+                server=json_responce["server"],
+                photos_list=json_responce["photos_list"],
+                hash=json_responce["hash"])
+        except Exception as err:
+            print(f"Не удалось загрузить файл {file}")
+            print(err)
+            continue
