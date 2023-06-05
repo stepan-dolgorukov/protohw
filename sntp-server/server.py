@@ -25,7 +25,7 @@ def run_server(port, delay):
     with ThreadPool() as pool:
         while True:
             data, sender = sock.recvfrom(128)
-            pool.apply(serve, args=(sock, data, sender, delay))
+            pool.apply_async(serve, args=(sock, data, sender, delay))
 
 
 if __name__ == '__main__':
