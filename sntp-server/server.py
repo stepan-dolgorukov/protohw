@@ -35,7 +35,7 @@ if __name__ == '__main__':
         "--port",
         "-p",
         type=int,
-        default=55123,
+        default=55_123,
         help="Порт, который будет слушать сервер")
 
     parser.add_argument(

@@ -13,7 +13,7 @@ def time_from_reply(reply: bytes):
 
 
 UDP_IP = "127.0.0.1"
-UDP_PORT = 123
+UDP_PORT = 55_123
 MESSAGE = make_request_packet()
 
 current_ts = current_timestamp()
