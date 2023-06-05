@@ -52,8 +52,8 @@ if __name__ == '__main__':
         print(err)
         exit(1)
 
-    for file in directory_image_files(args.dir):
-        print(f"Загружается {file}")
+    for number_file, file in enumerate(files := directory_image_files(args.dir)):
+        print(f"Загружается {file}, {1 + number_file}/{len(files)}")
         path_file = Path(args.dir) / file
 
         try:
